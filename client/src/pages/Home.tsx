@@ -1,5 +1,7 @@
-import { useCallback } from "react"
+import { useCallback, useEffect, useRef } from "react"
 import { useNavigate } from "react-router-dom";
+import { VideoChat } from "../components/VideoChat";
+import { runVideo } from "../services/runVideo";
 
 export default function Home() {
     const navigate = useNavigate();
@@ -17,6 +19,8 @@ export default function Home() {
     }, [])
     return (
         <div className="home">
+            {/* <VideoChat /> */}
+    
             <button className="text-white bg-purple-500 p-3 rounded-md text-sm" onClick={handleCreateRoom}>Create Room</button>
         </div>
     )

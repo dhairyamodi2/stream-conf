@@ -27,7 +27,7 @@ export const Room = function () {
             socket.onmessage = function (ev) {
                 const response = JSON.parse(ev.data) as Response<{user_type : string}>
                 setJoinRoomRes(response)
-                // console.log(response)
+                console.log(response)
             }
         }
     }, [params, socket])
@@ -35,9 +35,8 @@ export const Room = function () {
     if (joinRoomRes) {
         return (
             <div>
-                <VideoChat />
                 {joinRoomRes.payload.code === 'no-room-error' ? <NotFoundPage /> : 
-                <VideoChat />}
+                <VideoChat joinRoomRes={joinRoomRes}/>}
             </div>
         )
     }

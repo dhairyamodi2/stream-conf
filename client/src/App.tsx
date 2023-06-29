@@ -8,7 +8,7 @@ function App() {
     let [client_socket, setSocket] = useState<WebSocket>()
 
     useEffect(() => {
-        let socket = new WebSocket("ws://localhost:5000/ws")
+        let socket = new WebSocket("ws://192.168.1.6:5000/ws")
         socket.onopen = function (e) {
             setSocket(socket)
         }
