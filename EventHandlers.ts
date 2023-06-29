@@ -46,7 +46,7 @@ export function handleJoinRoom(id : string, client : WebSocket) {
                 }
             }))
             ws[1].send(JSON.stringify({
-                event_type : 'join_room-res',
+                event_type : 'join-room-res',
                 payload: {
                     success: true,
                     code : 'waiting-step',
