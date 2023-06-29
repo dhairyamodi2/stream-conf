@@ -1,6 +1,6 @@
 import * as WebSocket from 'ws'
 import { rooms } from "./main"
-import { Response } from './types/types';
+import { JoinRoom, Response } from './types/types';
 
 export function handleJoinRoom(id : string, client : WebSocket) {
     try {
@@ -56,6 +56,64 @@ export function handleJoinRoom(id : string, client : WebSocket) {
             }))
         }
         // console.log(rooms)
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
+export function handleGenerateOffer(offer : any, client : WebSocket, id : string) {
+    try {
+        if (offer && id) {
+            let clients = rooms.get(id)
+            let responseObj : Response<any>
+            if(clients && clients.length == 2) {
+                responseObj = {
+                    event_type: 'offer-res',
+                    payload: {
+                        success: true,
+                        message: "",
+                        data: offer,
+                        code: "offer-received"
+                    }
+                }
+                if (client === clients[0]) {
+                    clients[1].send(JSON.stringify(responseObj))
+                }
+                else if (client == clients[1]) {
+                    clients[0].send(JSON.stringify(responseObj))
+                }
+            }
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
+export function handleGenerateAnswer(ans : any, client : WebSocket, id : string) {
+    try {
+        if(ans && id) {
+            const clients = rooms.get(id)
+            let responseObj : Response<any>
+            if(clients && clients.length == 2) {
+                responseObj = {
+                    event_type: 'ans-res',
+                    payload: {
+                        success: true,
+                        message: "",
+                        data: ans,
+                        code: "ans-received"
+                    }
+                }
+                if (client === clients[0]) {
+                    clients[1].send(JSON.stringify(responseObj))
+                }
+                else if (client == clients[1]) {
+                    clients[0].send(JSON.stringify(responseObj))
+                }
+            }
+        }
     } catch (error) {
         console.log(error)
     }
