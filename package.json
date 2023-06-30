@@ -6,9 +6,9 @@
   "license": "MIT",
   "scripts": {
     "watch": "tsc --watch",
-    "build" : "cd client && yarn install && yarn build && tsc --build",
+    "build" : "cd client && yarn install && yarn build && yarn add -",
     "dev": "nodemon dist/main.js",
-    "start": "node dist/main.js"
+    "start": "yarn global add typescript && tsc --build && node dist/main.js"
   },
   "dependencies": {
     "@types/cors": "^2.8.13",
