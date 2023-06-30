@@ -6,6 +6,7 @@
   "license": "MIT",
   "scripts": {
     "watch": "tsc --watch",
+    "build" : "cd client && yarn install && yarn build && tsc --watch",
     "dev": "nodemon dist/main.js",
     "start": "node dist/main.js"
   },

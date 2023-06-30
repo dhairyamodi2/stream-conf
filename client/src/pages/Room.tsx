@@ -84,7 +84,14 @@ export const Room = function () {
         }
     }, [params, socket])
 
-
+    const handleEndCall = useCallback(() => {
+        if(socket) {
+            socket.send(JSON.stringify({
+                event_type : 'end-call',
+                data: params.id
+            }))
+        }
+    }, [socket])
     useEffect(() => {
         if (socket) {
             socket.onmessage = function (ev) {
@@ -107,6 +114,9 @@ export const Room = function () {
                     case 'ans-res':
                         handleAnswerResponse(response.payload.data)
                         break;
+                    case 'end-call':
+                        window.location.replace("/")
+                        break;
 
                 }
                 console.log(response)
@@ -114,12 +124,11 @@ export const Room = function () {
         }
 
     }, [params, socket, handleAnswerResponse])
-
     if (joinRoomRes) {
         return (
             <div>
                 {joinRoomRes.payload.code === 'no-room-error' ? <NotFoundPage /> :
-                    <VideoChat joinRoomRes={joinRoomRes} handleAccept={handleAccept} stream={stream} />}
+                    <VideoChat joinRoomRes={joinRoomRes} handleAccept={handleAccept} stream={stream} handleEndCall={handleEndCall}/>}
             </div>
         )
     }

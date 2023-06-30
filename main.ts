@@ -3,7 +3,7 @@ import dotenv from 'dotenv'
 import path, { parse } from 'path';
 import * as http from 'http'
 import * as WebSocket from 'ws'
-import { handleGenerateAnswer, handleGenerateOffer, handleJoinRoom } from './EventHandlers';
+import { handleEndCall, handleGenerateAnswer, handleGenerateOffer, handleJoinRoom } from './EventHandlers';
 import * as crypto from 'crypto'
 import cors from 'cors';
 import { error } from 'console';
@@ -24,6 +24,7 @@ app.use(cors({
 dotenv.config({path: path.join(__dirname, "../.env")});
 
 server.listen(process.env.PORT, () => {
+    console.log(path.join(__dirname, "../client/build/index.html"))
     console.log(`Server runnning on port ${process.env.PORT}`)
 })
 
@@ -64,6 +65,11 @@ socket_server.on("connection", (webSocket : WebSocket) => {
             case 'answer-generated':
                 console.log(data)
                 handleGenerateAnswer(data.ans, webSocket, data.room as string)
+                break;
+            case 'end-call' :
+                console.log(data)
+                handleEndCall(webSocket, data as string)
+                break;
 
 
         }
@@ -71,6 +77,8 @@ socket_server.on("connection", (webSocket : WebSocket) => {
     })
     webSocket.send('connected');
 })
+
+app.use(express.static(path.join(__dirname, '../client/build')));
 
 
 app.get("/create-room", (req, res) => {
@@ -84,4 +92,9 @@ app.get("/create-room", (req, res) => {
     })
 
    
+})
+
+
+app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "../client/build/index.html"));
 })

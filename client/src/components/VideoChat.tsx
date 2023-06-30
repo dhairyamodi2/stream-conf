@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { runVideo } from "../services/runVideo"
 import { Response } from "../../../types/types"
 import { rtcService } from "../services/RtcService"
@@ -8,8 +8,9 @@ interface VideoChatProps {
     joinRoomRes : Response<{user_type : string}>
     handleAccept: () => Promise<void>
     stream : MediaStream | undefined
+    handleEndCall :() => void
 }
-export const VideoChat : React.FC<VideoChatProps> = function ({joinRoomRes, handleAccept, stream}) {
+export const VideoChat : React.FC<VideoChatProps> = function ({joinRoomRes, handleAccept, stream, handleEndCall}) {
     const videoRef = useRef<HTMLVideoElement>(null)
     useEffect(() => {
         if(videoRef.current && stream) {
@@ -24,7 +25,8 @@ export const VideoChat : React.FC<VideoChatProps> = function ({joinRoomRes, hand
             setRemoteStream(event.streams[0])
         })
     }, [])
-
+    
+    
 
     useEffect(() => {
         if(receivedVideoRef.current && remoteStream) {
@@ -54,6 +56,7 @@ export const VideoChat : React.FC<VideoChatProps> = function ({joinRoomRes, hand
             {joinRoomRes.payload.code === 'waiting-step' && <div>
                 <p>Please wait while host admits you! Do not refresh the page!</p>
                 </div>}
+            <p><button onClick={handleEndCall} className="bg-purple-400 text-white p-3 mx-auto w-auto">End Call</button></p>
             <video ref={receivedVideoRef} autoPlay width={300} height={300}></video>
         </div>
     )

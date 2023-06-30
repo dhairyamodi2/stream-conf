@@ -118,3 +118,29 @@ export function handleGenerateAnswer(ans : any, client : WebSocket, id : string)
         console.log(error)
     }
 }
+
+export function handleEndCall (client : WebSocket, id : string) {
+    console.log('ending call..')
+    try {
+        const clients = rooms.get(id)
+        console.log('end call here')
+        let responseObj : Response<any> 
+        if(clients && typeof (clients) == 'object') {
+            clients.map((client) => {
+                responseObj = {
+                    event_type:'end-call',
+                    payload: {
+                        success: true,
+                        message: "Get out",
+                        data: null,
+                        code: 'end-call'
+                    }
+                }
+                console.log(JSON.stringify(responseObj))
+                client.send(JSON.stringify(responseObj))
+            })
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
