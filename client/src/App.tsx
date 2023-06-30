@@ -8,7 +8,7 @@ function App() {
     let [client_socket, setSocket] = useState<WebSocket>()
 
     useEffect(() => {
-        let socket = new WebSocket(`ws://${window.location.host}/ws`)
+        let socket = new WebSocket(`${window.location.protocol === 'https' ? "wss" : "ws"}://${window.location.host}/ws`)
         socket.onopen = function (e) {
             setSocket(socket)
         }
